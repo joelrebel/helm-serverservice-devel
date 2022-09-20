@@ -1,7 +1,7 @@
 ## k8s helm charts for a server service development instance.
 
 Note: this deploys an *insecure* cockroachdb, serverservice instance in the
-`default` k8s namespace to enable serverservice development.
+`default` k8s namespace to enable local [serverservice](https://github.com/metal-toolbox/hollow-serverservice/) development.
 
 
 ### Prerequisites
