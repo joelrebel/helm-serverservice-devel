@@ -14,8 +14,38 @@ Note: this deploys an *insecure* cockroachdb, serverservice instance in the
 
 - Run `make k8s-local-devel`
 
-### Check out make help for a list of available commands.
+### Run a devel serverservice docker image
 
+1. In your fork of the serverservice code repository - build the dev image with your changes.
+```
+❯ docker build -f Dockerfile.dev .
+```
+
+2. Tag the built image
+```
+> docker tag <new image sha> localhost:5000/server-service:<semver>-<devel branch name>
+```
+
+3. Load into KIND registry
+```
+kind load docker-image
+localhost:5000/server-service:<semver>-<devel branch name
+```
+
+4. In this repository - update values.yaml to point to new image
+```
+serverservice:
+  image:
+    repository: localhost:5000/server-service
+    tag: <semver>-<devel branch name>
+```
+
+5. Helm upgrade
+```
+helm upgrade serverservice-devel . -f values.yaml
+```
+
+### Check out make help for a list of available commands.
 
 ```
 $ make help

@@ -21,7 +21,7 @@ spec:
           env:
             - name: SERVERSERVICE_DB_URI
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
-          image: ghcr.io/metal-toolbox/hollow-serverservice:v0.14.2
+          image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice-migrate
           resources:
             limits:
@@ -36,7 +36,7 @@ spec:
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED
               value: "false"
-          image: ghcr.io/metal-toolbox/hollow-serverservice:v0.14.2
+          image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice
           args:
             - serve
