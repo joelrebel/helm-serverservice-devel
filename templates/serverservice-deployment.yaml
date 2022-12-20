@@ -19,7 +19,7 @@ spec:
             - migrate
             - up
           env:
-            - name: SERVERSERVICE_DB_URI
+            - name: SERVERSERVICE_CRDB_URI
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
           image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice-migrate
@@ -32,7 +32,7 @@ spec:
               memory: 200M
       containers:
         - env:
-            - name: SERVERSERVICE_DB_URI
+            - name: SERVERSERVICE_CRDB_URI
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED
               value: "false"
