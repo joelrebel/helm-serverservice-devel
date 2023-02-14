@@ -36,6 +36,12 @@ spec:
               value: postgresql://root@crdb:26257/defaultdb?sslmode=disable
             - name: SERVERSERVICE_OIDC_ENABLED
               value: "false"
+            - name: SERVERSERVICE_NATS_URL
+              value: "nats://nats:4222"
+            - name: SERVERSERVICE_NATS_STREAM_USER
+              value: serverservice
+            - name: SERVERSERVICE_NATS_STREAM_PASS
+              value: password
           image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice
           args:

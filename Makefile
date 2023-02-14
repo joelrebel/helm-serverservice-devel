@@ -16,10 +16,17 @@ port-forward-hss: kubectl-ctx-kind
 port-forward-crdb: kubectl-ctx-kind
 	kubectl port-forward deployment/crdb 26257:26257
 
+## port forward chaos-mesh dashboard (runs in foreground)
+port-forward-chaos-dash: kubectl-ctx-kind
+	kubectl port-forward  service/chaos-dashboard 2333:2333
+
+
 ## connect to crdb with psql (requires port-forward-crdb)
 psql-crdb: kubectl-ctx-kind
 	psql -d "postgresql://root@localhost:26257/defaultdb?sslmode=disable"
 
+
+#
 ## set kube ctx to kind cluster
 kubectl-ctx-kind:
 	export KUBECONFIG=~/.kube/config_kind
