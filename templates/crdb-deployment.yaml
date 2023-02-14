@@ -17,11 +17,15 @@ spec:
         k8s-service: crdb
     spec:
       containers:
-        - args:
+        - name: crdb
+          env:
+            # https://github.com/cockroachdb/cockroach/issues/81209
+            - name: COCKROACH_RAFT_CLOSEDTS_ASSERTIONS_ENABLED
+              value: "false"
+          image: cockroachdb/cockroach:latest-v21.1
+          args:
             - start-single-node
             - --insecure
-          image: cockroachdb/cockroach:latest-v21.1
-          name: crdb
           ports:
             - containerPort: 8080
             - containerPort: 26257

@@ -17,19 +17,12 @@ Note: this deploys an *insecure* cockroachdb, serverservice instance in the
 ### Run a devel serverservice docker image
 
 1. In your fork of the serverservice code repository - build the dev image with your changes.
-```
-❯ docker build -f Dockerfile.dev .
-```
 
-2. Tag the built image
 ```
-> docker tag <new image sha> localhost:5000/server-service:<semver>-<devel branch name>
-```
-
-3. Load into KIND registry
-```
-kind load docker-image
-localhost:5000/server-service:<semver>-<devel branch name
+export GIT_TAG="localhost:5000/serverservice:<NEW TAG HERE>" && \
+    GOOS=linux GOARCH=amd64 go build -o serverservice && \
+    docker build -t "${GIT_TAG}" -f Dockerfile . && \
+    kind load docker-image "${GIT_TAG}"
 ```
 
 4. In this repository - update values.yaml to point to new image
@@ -37,7 +30,7 @@ localhost:5000/server-service:<semver>-<devel branch name
 serverservice:
   image:
     repository: localhost:5000/server-service
-    tag: <semver>-<devel branch name>
+    tag: <GIT_TAG>
 ```
 
 5. Helm upgrade
@@ -45,10 +38,40 @@ serverservice:
 helm upgrade serverservice-devel . -f values.yaml
 ```
 
+## NATs setup
+
+The chart configures a NATS Jetstream that serverservice sends messages on,
+for the list of accounts configured check out [values.yaml](values.yaml).
+
+Also check out the [cheatsheet](cheatsheet.md) to validate the Jetstream setup.
+
+
+## Chaos mesh
+
+The utility exposes a cool dashboard to run chaos experiments like dropping packets
+from one app to another or such.
+
+
+Install chaos mesh
+```
+helm install chaos-mesh  chaos-mesh/chaos-mesh -n=default --version 2.5.1 -f values.yaml
+```
+
+
+forward the dashboard port and run an experiment ! `http://localhost:2333/experiments`
+```
+make port-forward-chaos-dash
+```
+
+Uninstall chaos mesh
+```
+helm delete  chaos-mesh -n=default
+```
+
 ### Check out make help for a list of available commands.
 
 ```
-$ make help
+❯ make
 
 Usage:
   make <target>
@@ -58,6 +81,7 @@ Targets:
   local-devel-upgrade  upgrade helm chart for local devel environment
   port-forward-hss     port forward hollow server service port (runs in foreground)
   port-forward-crdb    port forward crdb service port (runs in foreground)
+  port-forward-chaos-dash port forward chaos-mesh dashboard (runs in foreground)
   psql-crdb            connect to crdb with psql (requires port-forward-crdb)
   kubectl-ctx-kind     set kube ctx to kind cluster
   help                 Show help
