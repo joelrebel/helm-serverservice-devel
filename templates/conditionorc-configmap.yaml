@@ -52,8 +52,12 @@ data:
         duplicate_window: 5m
         retention: workQueue
       consumer:
+        pull: true
         name: conditionorc
         ack_wait: 5m
         max_ack_pending: 10
         subscribe_subjects:
           - com.hollow.sh.controllers.responses.>
+        # filter_subject required for a workqueue stream, must be unique
+        # between consumers.
+        filter_subject: com.hollow.sh.controllers.responses.>
