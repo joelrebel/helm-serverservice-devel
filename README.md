@@ -14,28 +14,22 @@ Note: this deploys an *insecure* cockroachdb, serverservice instance in the
 
 - Run `make k8s-local-devel`
 
+
 ### Run a devel serverservice docker image
 
 1. In your fork of the serverservice code repository - build the dev image with your changes.
 
 ```
-export GIT_TAG="localhost:5000/serverservice:<NEW TAG HERE>" && \
+export GIT_TAG="localhost:5000/serverservice:latest" && \
     GOOS=linux GOARCH=amd64 go build -o serverservice && \
     docker build -t "${GIT_TAG}" -f Dockerfile . && \
-    kind load docker-image "${GIT_TAG}"
+    docker push localhost:5000/serverservice:latest && kind load docker-image "${GIT_TAG}"
 ```
 
-4. In this repository - update values.yaml to point to new image
-```
-serverservice:
-  image:
-    repository: localhost:5000/server-service
-    tag: <GIT_TAG>
-```
 
 5. Helm upgrade
 ```
-helm upgrade serverservice-devel . -f values.yaml
+make local-devel-upgrade
 ```
 
 ## NATs setup

@@ -42,6 +42,8 @@ spec:
               value: serverservice
             - name: SERVERSERVICE_NATS_STREAM_PASS
               value: password
+            - name: SERVERSERVICE_NATS_STREAM_PREFIX
+              value: {{ .Values.serverservice.nats.publishStreamPrefix }}
           image: "{{ .Values.serverservice.image.repository }}:{{ .Values.serverservice.image.tag }}"
           name: serverservice
           args:

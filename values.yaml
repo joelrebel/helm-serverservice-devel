@@ -1,8 +1,30 @@
 serverservice:
   image:
-    repository: localhost:5000/serverservice
-    tag: v0.15.0
+    repository: "localhost:5000/serverservice"
+    tag: latest
     pullPolicy: Always
+  nats:
+    publishStreamPrefix: com.hollow.sh.serverservice.events
+
+conditionorc:
+  image:
+    repository: "localhost:5000/conditionorc"
+    tag: latest
+    pullPolicy: Always
+
+alloy:
+  image:
+    repository: "localhost:5000/alloy"
+    tag: latest
+    pullPolicy: Always
+  env:
+    SERVERSERVICE_ENDPOINT: http://serverservice:8000
+    SERVERSERVICE_SKIP_OAUTH: true
+    SERVERSERVICE_FACILITY_CODE: dc13
+    ALLOY_NATS_URL: "nats://nats:4222"
+    ALLOY_NATS_STREAM_USER: alloy
+    ALLOY_NATS_STREAM_PASS: password
+
 crdb:
   image: cockroachdb/cockroach:latest-v21.1
 #
@@ -24,6 +46,8 @@ nats:
             - user: serverservice
               pass: password
             - user: alloy
+              pass: password
+            - user: conditionorc
               pass: password
     #operatorjwt:
     #  name: operator-jwt

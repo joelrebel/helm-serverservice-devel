@@ -1,12 +1,12 @@
 .DEFAULT_GOAL := help
 
-## install helm chart for the server service local development environment
+## install helm chart for the sandbox env
 local-devel: kubectl-ctx-kind
-	helm install serverservice-devel . -f values.yaml
+	helm install hollow-sandbox . -f values.yaml
 
-## upgrade helm chart for local devel environment
+## upgrade helm chart for the sandbox environment
 local-devel-upgrade: kubectl-ctx-kind
-	helm upgrade serverservice-devel . -f values.yaml
+	helm upgrade hollow-sandbox . -f values.yaml
 
 ## port forward hollow server service port (runs in foreground)
 port-forward-hss: kubectl-ctx-kind

@@ -1,6 +1,6 @@
 apiVersion: v2
-name: serverservice-devel
-description: A helm chart for a server service development instance.
+name: hollow-sandbox
+description: A helm chart for developing hollow services.
 type: application
 version: 0.0.1
 appVersion: "0.0.1"
